@@ -198,4 +198,132 @@ router.get('/representative-gov', (_req, res) => {
   }
 })
 
+router.get('/urn-status', (req, res) => {
+  try {
+    const voteFormValidation = validateVoteCountParams(req.query)
+    voteService
+      .obtainUrnStatus(voteFormValidation)
+      .then((data) => {
+        res.status(200).json({
+          status: 'success',
+          message: 'Urn status obtained',
+          data
+        })
+      })
+      .catch((e) => {
+        if (e instanceof Error) {
+          res.status(400).json({
+            status: 'error',
+            message: cleanError(e.message),
+            data: null
+          })
+        }
+      })
+  } catch (e) {
+    if (e instanceof Error) {
+      res.status(400).json({
+        status: 'error',
+        message: cleanError(e.message),
+        data: null
+      })
+    }
+  }
+})
+
+router.get('/urn-results-1', (req, res) => {
+  try {
+    const voteFormValidation = validateVoteCountParams(req.query)
+    voteService
+      .obtainUrnResults1(voteFormValidation)
+      .then((data) => {
+        res.status(200).json({
+          status: 'success',
+          message: 'Urn results obtained',
+          data
+        })
+      })
+      .catch((e) => {
+        if (e instanceof Error) {
+          res.status(400).json({
+            status: 'error',
+            message: cleanError(e.message),
+            data: null
+          })
+        }
+      })
+  } catch (e) {
+    if (e instanceof Error) {
+      res.status(400).json({
+        status: 'error',
+        message: cleanError(e.message),
+        data: null
+      })
+    }
+  }
+})
+
+router.get('/urn-results-2', (req, res) => {
+  try {
+    const voteFormValidation = validateVoteCountParams(req.query)
+    voteService
+      .obtainUrnResults2(voteFormValidation)
+      .then((data) => {
+        res.status(200).json({
+          status: 'success',
+          message: 'Urn results obtained',
+          data
+        })
+      })
+      .catch((e) => {
+        if (e instanceof Error) {
+          res.status(400).json({
+            status: 'error',
+            message: cleanError(e.message),
+            data: null
+          })
+        }
+      })
+  } catch (e) {
+    if (e instanceof Error) {
+      res.status(400).json({
+        status: 'error',
+        message: cleanError(e.message),
+        data: null
+      })
+    }
+  }
+})
+
+router.get('/urn-results-3', (req, res) => {
+  try {
+    const voteFormValidation = validateVoteCountParams(req.query)
+    voteService
+      .obtainUrnResults3(voteFormValidation)
+      .then((data) => {
+        res.status(200).json({
+          status: 'success',
+          message: 'Urn results obtained',
+          data
+        })
+      })
+      .catch((e) => {
+        if (e instanceof Error) {
+          res.status(400).json({
+            status: 'error',
+            message: cleanError(e.message),
+            data: null
+          })
+        }
+      })
+  } catch (e) {
+    if (e instanceof Error) {
+      res.status(400).json({
+        status: 'error',
+        message: cleanError(e.message),
+        data: null
+      })
+    }
+  }
+})
+
 export default router
