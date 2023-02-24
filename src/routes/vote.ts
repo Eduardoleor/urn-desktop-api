@@ -73,6 +73,38 @@ router.post('/register', (req, res) => {
   }
 })
 
+router.post('/add', (req, res) => {
+  try {
+    const addVoteFormValidation = validateAddVoteParams(req.body)
+    voteService
+      .addVote(addVoteFormValidation)
+      .then((data) => {
+        res.status(200).json({
+          status: 'success',
+          message: 'Voter registered',
+          data
+        })
+      })
+      .catch((e) => {
+        if (e instanceof Error) {
+          res.status(400).json({
+            status: 'error',
+            message: cleanError(e.message),
+            data: null
+          })
+        }
+      })
+  } catch (e) {
+    if (e instanceof Error) {
+      res.status(400).json({
+        status: 'error',
+        message: cleanError(e.message),
+        data: null
+      })
+    }
+  }
+})
+
 router.get('/representative-federal', (_req, res) => {
   try {
     voteService
@@ -104,15 +136,14 @@ router.get('/representative-federal', (_req, res) => {
   }
 })
 
-router.post('/add', (req, res) => {
+router.get('/representative-local', (_req, res) => {
   try {
-    const addVoteFormValidation = validateAddVoteParams(req.body)
     voteService
-      .addVote(addVoteFormValidation)
+      .obtainLocalRepresentatives()
       .then((data) => {
         res.status(200).json({
           status: 'success',
-          message: 'Voter registered',
+          message: 'Local representatives obtained',
           data
         })
       })

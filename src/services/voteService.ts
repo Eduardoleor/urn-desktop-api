@@ -58,24 +58,11 @@ export const addVote = async (vote: AddVote): Promise<Count> => {
   try {
     const { id, representative_id, representative_type, voter_id } = vote
     const count = 1
-
-    const user = await pool.query(
-      'SELECT * FROM COUNT WHERE VOTER_ASSOCIATED = $1',
-      [voter_id]
+    const query = await pool.query(
+      'INSERT INTO COUNT(USER_ASSOCIATED, VOTER_ASSOCIATED, USER_HAS_VOTED, REPRESENTATIVE_ID, REPRESENTATIVE_TYPE, COUNT) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+      [id, voter_id, true, representative_id, representative_type, count]
     )
-    const userHasVotedFromRepresentative = user?.rows?.some(
-      (representative) =>
-        representative.representative_type === representative_type
-    )
-    if (userHasVotedFromRepresentative) {
-      throw new Error('User has already voted from this representative')
-    } else {
-      const query = await pool.query(
-        'INSERT INTO COUNT(USER_ASSOCIATED, VOTER_ASSOCIATED, USER_HAS_VOTED, REPRESENTATIVE_ID, REPRESENTATIVE_TYPE, COUNT) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-        [id, voter_id, true, representative_id, representative_type, count]
-      )
-      return query.rows[0] as Count
-    }
+    return query.rows[0] as Count
   } catch (err: unknown) {
     throw new Error(`${err as string}`)
   }
@@ -86,6 +73,17 @@ Representative[]
 > => {
   try {
     const query = await pool.query('SELECT * FROM REPRESENTATIVES_FEDERAL', [])
+    return query.rows as Representative[]
+  } catch (err: unknown) {
+    throw new Error(`${err as string}`)
+  }
+}
+
+export const obtainLocalRepresentatives = async (): Promise<
+Representative[]
+> => {
+  try {
+    const query = await pool.query('SELECT * FROM REPRESENTATIVES_LOCAL', [])
     return query.rows as Representative[]
   } catch (err: unknown) {
     throw new Error(`${err as string}`)
