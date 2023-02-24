@@ -89,3 +89,17 @@ Representative[]
     throw new Error(`${err as string}`)
   }
 }
+
+export const obtainGovRepresentatives = async (): Promise<
+Representative[]
+> => {
+  try {
+    const query = await pool.query(
+      'SELECT * FROM REPRESENTATIVES_GOVERNORSHIP',
+      []
+    )
+    return query.rows as Representative[]
+  } catch (err: unknown) {
+    throw new Error(`${err as string}`)
+  }
+}

@@ -167,4 +167,35 @@ router.get('/representative-local', (_req, res) => {
   }
 })
 
+router.get('/representative-gov', (_req, res) => {
+  try {
+    voteService
+      .obtainGovRepresentatives()
+      .then((data) => {
+        res.status(200).json({
+          status: 'success',
+          message: 'Gov representatives obtained',
+          data
+        })
+      })
+      .catch((e) => {
+        if (e instanceof Error) {
+          res.status(400).json({
+            status: 'error',
+            message: cleanError(e.message),
+            data: null
+          })
+        }
+      })
+  } catch (e) {
+    if (e instanceof Error) {
+      res.status(400).json({
+        status: 'error',
+        message: cleanError(e.message),
+        data: null
+      })
+    }
+  }
+})
+
 export default router
