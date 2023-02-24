@@ -6,4 +6,12 @@ const isString = (text: string): boolean => {
   return typeof text === 'string'
 }
 
-export { isDate, isString }
+const cleanError = (err: any): string => {
+  if (isString(err)) {
+    return err.replace('Error:', '')
+  } else {
+    return err
+  }
+}
+
+export { isDate, isString, cleanError }

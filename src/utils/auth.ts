@@ -20,7 +20,6 @@ const validateUserParams = (object: any): UserValidation => {
     name: parseUsername(object.username),
     password: parsePassword(object.password)
   }
-
   return newUser
 }
 

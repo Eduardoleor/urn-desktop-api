@@ -1,10 +1,11 @@
 import express from 'express'
 import * as authService from '../services/authService'
 import validateUserParams from '../utils/auth'
+import { cleanError } from '../utils/common'
 
 const router = express.Router()
 
-router.get('/validate', (req, res) => {
+router.post('/validate', (req, res) => {
   try {
     const userForValidation = validateUserParams(req.body)
     authService
@@ -20,7 +21,7 @@ router.get('/validate', (req, res) => {
         if (e instanceof Error) {
           res.status(400).json({
             status: 'error',
-            message: e.message,
+            message: cleanError(e.message),
             data: null
           })
         }
@@ -29,7 +30,7 @@ router.get('/validate', (req, res) => {
     if (e instanceof Error) {
       res.status(400).json({
         status: 'error',
-        message: e.message,
+        message: cleanError(e.message),
         data: null
       })
     }
