@@ -2,6 +2,7 @@ import express from 'express'
 import * as voteService from '../services/voteService'
 import { cleanError } from '../utils/common'
 import {
+  validateAddVoteParams,
   validateVoteCountParams,
   valideRegisterVoteParams
 } from '../utils/vote'
@@ -45,6 +46,69 @@ router.post('/register', (req, res) => {
     const voterFormValidation = valideRegisterVoteParams(req.body)
     voteService
       .registerVoter(voterFormValidation.id, voterFormValidation.voter_key)
+      .then((data) => {
+        res.status(200).json({
+          status: 'success',
+          message: 'Voter registered',
+          data
+        })
+      })
+      .catch((e) => {
+        if (e instanceof Error) {
+          res.status(400).json({
+            status: 'error',
+            message: cleanError(e.message),
+            data: null
+          })
+        }
+      })
+  } catch (e) {
+    if (e instanceof Error) {
+      res.status(400).json({
+        status: 'error',
+        message: cleanError(e.message),
+        data: null
+      })
+    }
+  }
+})
+
+router.get('/representative-federal', (_req, res) => {
+  try {
+    voteService
+      .obtainFederalRepresentatives()
+      .then((data) => {
+        res.status(200).json({
+          status: 'success',
+          message: 'Federal representatives obtained',
+          data
+        })
+      })
+      .catch((e) => {
+        if (e instanceof Error) {
+          res.status(400).json({
+            status: 'error',
+            message: cleanError(e.message),
+            data: null
+          })
+        }
+      })
+  } catch (e) {
+    if (e instanceof Error) {
+      res.status(400).json({
+        status: 'error',
+        message: cleanError(e.message),
+        data: null
+      })
+    }
+  }
+})
+
+router.post('/add', (req, res) => {
+  try {
+    const addVoteFormValidation = validateAddVoteParams(req.body)
+    voteService
+      .addVote(addVoteFormValidation)
       .then((data) => {
         res.status(200).json({
           status: 'success',
