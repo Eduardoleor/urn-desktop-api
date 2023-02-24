@@ -1,19 +1,19 @@
 import express from 'express'
-import * as authService from '../services/authService'
-import validateUserParams from '../utils/auth'
+import * as voteService from '../services/voteService'
 import { cleanError } from '../utils/common'
+import { validateVoteCountParams } from '../utils/vote'
 
 const router = express.Router()
 
-router.post('/validate', (req, res) => {
+router.get('/count', (req, res) => {
   try {
-    const userFormValidation = validateUserParams(req.body)
-    authService
-      .validateSession(userFormValidation)
+    const voteFormValidation = validateVoteCountParams(req.query)
+    voteService
+      .obtainCount(voteFormValidation)
       .then((data) => {
         res.status(200).json({
           status: 'success',
-          message: 'User validated',
+          message: 'Vote count obtained',
           data
         })
       })
