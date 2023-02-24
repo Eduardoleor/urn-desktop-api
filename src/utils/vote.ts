@@ -1,3 +1,4 @@
+import { VoterValidation } from '../voter.types'
 import { isString } from './common'
 
 const validateVoteCountParams = (params: any): string => {
@@ -6,4 +7,20 @@ const validateVoteCountParams = (params: any): string => {
   }
   return params.id
 }
-export { validateVoteCountParams }
+
+const isValidParam = (param: string, paramName: string): string => {
+  if (!isString(param)) {
+    throw new Error(`Invalid ${paramName} parameter`)
+  }
+  return param
+}
+
+const valideRegisterVoteParams = (params: any): VoterValidation => {
+  const newVoter: VoterValidation = {
+    id: isValidParam(params.id, 'ID'),
+    voter_key: isValidParam(params.voter_key, 'Voter Key')
+  }
+  return newVoter
+}
+
+export { validateVoteCountParams, valideRegisterVoteParams }
